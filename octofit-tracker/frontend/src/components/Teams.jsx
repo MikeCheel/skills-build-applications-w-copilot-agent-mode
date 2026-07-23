@@ -15,13 +15,9 @@ function normalizeResponse(payload) {
   }
 }
 
-function getApiEndpoint(resourceName) {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
-  const baseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api'
-  return `${baseUrl}/${resourceName}/`
-}
+const teamsApiUrl = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+  : 'http://localhost:8000/api/teams/'
 
 export default function Teams() {
   const [state, setState] = useState({ items: [], count: 0, next: null, previous: null })
@@ -34,7 +30,7 @@ export default function Teams() {
     async function loadTeams() {
       try {
         setLoading(true)
-        const response = await fetch(getApiEndpoint('teams'))
+        const response = await fetch(teamsApiUrl)
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }

@@ -15,13 +15,9 @@ function normalizeResponse(payload) {
   }
 }
 
-function getApiEndpoint(resourceName) {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
-  const baseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api'
-  return `${baseUrl}/${resourceName}/`
-}
+const workoutsApiUrl = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+  : 'http://localhost:8000/api/workouts/'
 
 export default function Workouts() {
   const [state, setState] = useState({ items: [], count: 0, next: null, previous: null })
@@ -34,7 +30,7 @@ export default function Workouts() {
     async function loadWorkouts() {
       try {
         setLoading(true)
-        const response = await fetch(getApiEndpoint('workouts'))
+        const response = await fetch(workoutsApiUrl)
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
